@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>AllDisks</key>
+	<array>
+		<string>disk2</string>
+		<string>disk2s2</string>
+	</array>
+	<key>AllDisksAndPartitions</key>
+	<array>
+		<dict>
+			<key>Content</key>
+			<string>FDisk_partition_scheme</string>
+			<key>DeviceIdentifier</key>
+			<string>disk2</string>
+			<key>OSInternal</key>
+			<false/>
+			<key>Partitions</key>
+			<array>
+				<dict>
+					<key>Content</key>
+					<string>DOS_FAT_32</string>
+					<key>DeviceIdentifier</key>
+					<string>disk2s2</string>
+					<key>MountPoint</key>
+					<string>/Volumes/USER'S IPOD</string>
+					<key>Size</key>
+					<integer>29923568128</integer>
+					<key>VolumeName</key>
+					<string>USER'S IPOD</string>
+					<key>VolumeUUID</key>
+					<string>DE2F7675-271B-341A-A556-FE6393768768</string>
+				</dict>
+			</array>
+			<key>Size</key>
+			<integer>30005821440</integer>
+		</dict>
+	</array>
+	<key>VolumesFromDisks</key>
+	<array>
+		<string>USER'S IPOD</string>
+	</array>
+	<key>WholeDisks</key>
+	<array>
+		<string>disk2</string>
+	</array>
+</dict>
+</plist>

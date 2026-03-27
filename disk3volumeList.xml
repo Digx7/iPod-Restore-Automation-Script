@@ -1,0 +1,16 @@
+<root>
+<dict>
+					<key>Content</key>
+					<string>DOS_FAT_32</string>
+					<key>DeviceIdentifier</key>
+					<string>disk3s1</string>
+					<key>MountPoint</key>
+					<string>/Volumes/USER'S IPOD 1</string>
+					<key>Size</key>
+					<integer>159840038912</integer>
+					<key>VolumeName</key>
+					<string>USER'S IPOD</string>
+					<key>VolumeUUID</key>
+					<string>1BAB28F9-4B9B-38BF-9321-6C91C38E9578</string>
+				</dict>
+</root>
