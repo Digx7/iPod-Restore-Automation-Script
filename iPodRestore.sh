@@ -3,6 +3,39 @@
 
 echo "Begining script $0"
 
+# Checking Flags ======================================
+
+verbose=false
+force=false
+drive_filter_number=1
+
+# Define the flags the script accepts. A colon (:) after a flag means it requires an argument.
+# In this example:
+# -v does not require an argument
+# -f requires an argument
+while getopts ":vfd:" flag; do
+	case "${flag}" in
+		v)
+			verbose=true
+		;;
+	 	f)
+			force=true
+		;;
+		d)
+			drive_filter_number="${OPTARG}"
+		;;
+		*)
+			# Handle invalid options
+			echo "Invalid option: -${OPTARG}" >&2
+			exit 1
+		;;
+	esac
+done
+
+if [ "$verbose" = true ]; then echo "Verbose = ${verbose}"; fi
+if [ "$verbose" = true ]; then echo "Force = ${force}"; fi
+if [ "$verbose" = true ]; then echo "Drive Filter = ${drive_filter_number}"; fi
+
 # Getting Disk List =======================
 
 echo "Getting Disk List"
