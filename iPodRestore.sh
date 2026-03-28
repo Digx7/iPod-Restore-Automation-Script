@@ -40,12 +40,12 @@ if [ "$verbose" = true ]; then echo "Drive Filter = ${drive_filter_number}"; fi
 
 echo "Getting Disk List"
 diskutil list -plist > diskList.xml
-echo "Created Disk List"
+if [ "$verbose" = true ]; then echo "Created Disk List"; fi
 
-echo "Getting Disk Names"
+if [ "$verbose" = true ]; then echo "Getting Disk Names"; fi
 xpath -q -e "//array[last()]/string/text()" "diskList.xml" > "diskNameList.txt"
 
-echo "Creating Array"
+if [ "$verbose" = true ]; then echo "Creating Array"; fi
 
 initial_disk_array=()
 filtered_disk_array=()
@@ -55,54 +55,55 @@ while IFS= read -r line; do
 done < "diskNameList.txt"
 
 disk_array_length=${#my_disk_array[@]}
-echo "Disk Array length: $disk_array_length"
+if [ "$verbose" = true ]; then echo "Disk Array length: $disk_array_length"; fi
 
-echo "Looping through initial disk array"
+if [ "$verbose" = true ]; then echo "Looping through initial disk array"; fi
 for disk in "${initial_disk_array[@]}"; do
-	echo "Disk: $disk"
+	if [ "$verbose" = true ]; then echo "Disk: $disk"; fi
+
 	if [[ "$disk" != "disk"[0-1]* ]]; then
-		echo "Should add disk to filter"
+		if [ "$verbose" = true ]; then echo "Should add disk to filter"; fi
 		filtered_disk_array+=("$disk")
 	fi
 done
-echo "Finished looping through initial disk array"
+if [ "$verbose" = true ]; then echo "Finished looping through initial disk array"; fi
 
-echo "Looping through filtered disk array"
+if [ "$verbose" = true ]; then echo "Looping through filtered disk array"; fi
 for disk in "${filtered_disk_array[@]}"; do
 	echo "Filtered Disk: $disk"
 done
-echo "Finished looping through filtered disk array"
+if [ "$verbose" = true ]; then echo "Finished looping through filtered disk array"; fi
 
 # Getting Volume List =========================
 
 volume_UUID_array=()
 
-echo "Getting volume UUIDs from filtered disk array"
+if [ "$verbose" = true ]; then echo "Getting volume UUIDs from filtered disk array"; fi
 for disk in "${filtered_disk_array[@]}"; do
-	echo "Filtered Disk: $disk"
+	if [ "$verbose" = true ]; then echo "Filtered Disk: $disk"; fi
 
-	echo "Creating disk list for $disk"
+	if [ "$verbose" = true ]; then echo "Creating disk list for $disk"; fi
 	diskutil list -plist "$disk" > "${disk}List.xml"
-	echo "Created disk list for $disk"
+	if [ "$verbose" = true ]; then echo "Created disk list for $disk"; fi
 
-	echo "Creating volume list for $disk"
+	if [ "$verbose" = true ]; then echo "Creating volume list for $disk"; fi
 	echo "<root>" > "${disk}volumeList.xml"
 	xpath -q -e "//dict[key/text()='VolumeUUID']" "${disk}List.xml" >> "${disk}volumeList.xml"
 	echo "</root>" >> "${disk}volumeList.xml"
-	echo "Created volume list for $disk"
+	if [ "$verbose" = true ]; then echo "Created volume list for $disk"; fi
 
-	echo "Creating volume UUID list for $disk"
+	if [ "$verbose" = true ]; then echo "Creating volume UUID list for $disk"; fi
 	xpath -q -e "/root/dict/string[last()]/text()" "${disk}volumeList.xml" > "${disk}volumeUUIDList.txt"
-	echo "Created volume UUID list for $disk"
+	if [ "$verbose" = true ]; then echo "Created volume UUID list for $disk"; fi
 
-	echo "Adding volume UUIDs from $disk to array"
+	if [ "$verbose" = true ]; then echo "Adding volume UUIDs from $disk to array"; fi
 	while IFS= read -r line; do
 		volume_UUID_array+=("$line")
 	done < "${disk}volumeUUIDList.txt"
-	echo "Added volume UUIDs from $disk to array"
+	if [ "$verbose" = true ]; then echo "Added volume UUIDs from $disk to array"; fi
 
 done
-echo "Got volume UUIDs from filtered disk array"
+if [ "$verbose" = true ]; then echo "Got volume UUIDs from filtered disk array"; fi
 
 for volume in "${volume_UUID_array[@]}"; do
 	echo "Volume: $volume"
