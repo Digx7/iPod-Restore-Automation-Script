@@ -54,14 +54,14 @@ while IFS= read -r line; do
         initial_disk_array+=("$line")
 done < "diskNameList.txt"
 
-disk_array_length=${#my_disk_array[@]}
+disk_array_length=${#initial_disk_array[@]}
 if [ "$verbose" = true ]; then echo "Disk Array length: $disk_array_length"; fi
 
 if [ "$verbose" = true ]; then echo "Looping through initial disk array"; fi
 for disk in "${initial_disk_array[@]}"; do
 	if [ "$verbose" = true ]; then echo "Disk: $disk"; fi
 
-	if [[ "$disk" != "disk"[0-1]* ]]; then
+	if [[ "$disk" != "disk"[0-$drive_filter_number]* ]]; then
 		if [ "$verbose" = true ]; then echo "Should add disk to filter"; fi
 		filtered_disk_array+=("$disk")
 	fi
@@ -73,6 +73,10 @@ for disk in "${filtered_disk_array[@]}"; do
 	echo "Filtered Disk: $disk"
 done
 if [ "$verbose" = true ]; then echo "Finished looping through filtered disk array"; fi
+
+echo "Exting Early for Dev reasons"
+echo "We need to veirfy that the disk filtering using variables is working as expected"
+exit 0
 
 # Getting Volume List =========================
 
