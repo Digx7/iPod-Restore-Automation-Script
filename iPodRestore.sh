@@ -109,6 +109,16 @@ for volume in "${volume_UUID_array[@]}"; do
 	echo "Volume: $volume"
 done
 
+if [ "$force" = false ]; then
+	read -p "Do you want to erase the above volumes? (Y/N): " choice
+	if [[ $choice != [Yy] ]]; then
+		echo "Exiting script"
+		exit 0
+	fi
+else
+	if [ "$verbose" = true ]; then echo "Force flag is set to true, skipping confirmation"; fi
+fi
+
 # Erasing Volumes ======================
 
 echo "Erasing all volumes"
