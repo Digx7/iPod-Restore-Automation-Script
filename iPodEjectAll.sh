@@ -49,13 +49,4 @@ for disk in "${filtered_disk_array[@]}"; do
 done
 echo "Finished eject 1"
 
-echo "Waiting for 1 minute for all disks to reconnect"
-sleep 60
-
-echo "Starting eject 2"
-for disk in "${filtered_disk_array[@]}"; do
-	diskutil eject "$disk"
-done
-echo "Finished eject 2"
-
-echo "All iPods should be restored now"
+echo "All iPods should be ejected now"
