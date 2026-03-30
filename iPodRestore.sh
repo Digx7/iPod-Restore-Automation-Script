@@ -74,9 +74,9 @@ for disk in "${filtered_disk_array[@]}"; do
 done
 if [ "$verbose" = true ]; then echo "Finished looping through filtered disk array"; fi
 
-echo "Exting Early for Dev reasons"
-echo "We need to veirfy that the disk filtering using variables is working as expected"
-exit 0
+# echo "Exting Early for Dev reasons"
+# echo "We need to veirfy that the disk filtering using variables is working as expected"
+# exit 0
 
 # Getting Volume List =========================
 
