@@ -121,7 +121,7 @@ for disk in "${filtered_disk_array[@]}"; do
 
 	else
 		echo "$disk partition type is INVALID not adding volume"
-
+		
 	fi
 
 done
