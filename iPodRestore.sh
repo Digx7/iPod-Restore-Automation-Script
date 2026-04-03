@@ -90,21 +90,39 @@ for disk in "${filtered_disk_array[@]}"; do
 	diskutil list -plist "$disk" > "${disk}List.xml"
 	if [ "$verbose" = true ]; then echo "Created disk list for $disk"; fi
 
-	if [ "$verbose" = true ]; then echo "Creating volume list for $disk"; fi
-	echo "<root>" > "${disk}volumeList.xml"
-	xpath -q -e "//dict[key/text()='VolumeUUID']" "${disk}List.xml" >> "${disk}volumeList.xml"
-	echo "</root>" >> "${disk}volumeList.xml"
-	if [ "$verbose" = true ]; then echo "Created volume list for $disk"; fi
+	#TODO: validate if partition schema is good
 
-	if [ "$verbose" = true ]; then echo "Creating volume UUID list for $disk"; fi
-	xpath -q -e "/root/dict/string[last()]/text()" "${disk}volumeList.xml" > "${disk}volumeUUIDList.txt"
-	if [ "$verbose" = true ]; then echo "Created volume UUID list for $disk"; fi
+	echo "<root>" > "${disk}PartitionsAndVolumeList.xml"
+	xpath -q -e "//dict/array/dict[key/text()='Content']" "${disk}List.xml" >> "${disk}PartitionsAndVolumeList.xml"
+	echo "</root>" >> "${disk}PartitionsAndVolumeList.xml"
 
-	if [ "$verbose" = true ]; then echo "Adding volume UUIDs from $disk to array"; fi
-	while IFS= read -r line; do
-		volume_UUID_array+=("$line")
-	done < "${disk}volumeUUIDList.txt"
-	if [ "$verbose" = true ]; then echo "Added volume UUIDs from $disk to array"; fi
+	partitionType=$(xpath -q -e "/root/dict[1]/string[1]/text()" "${disk}PartitionsAndVolumeList.xml")
+
+	echo "$disk partition type is $partitionType"
+
+	if [[ $partitionType == "FDisk_partition_scheme" ]]; then
+		echo "$disk partition type is valid adding volume"
+
+		if [ "$verbose" = true ]; then echo "Creating volume list for $disk"; fi
+		echo "<root>" > "${disk}volumeList.xml"
+		xpath -q -e "//dict[key/text()='VolumeUUID']" "${disk}List.xml" >> "${disk}volumeList.xml"
+		echo "</root>" >> "${disk}volumeList.xml"
+		if [ "$verbose" = true ]; then echo "Created volume list for $disk"; fi
+
+		if [ "$verbose" = true ]; then echo "Creating volume UUID list for $disk"; fi
+		xpath -q -e "/root/dict/string[last()]/text()" "${disk}volumeList.xml" > "${disk}volumeUUIDList.txt"
+		if [ "$verbose" = true ]; then echo "Created volume UUID list for $disk"; fi
+
+		if [ "$verbose" = true ]; then echo "Adding volume UUIDs from $disk to array"; fi
+		while IFS= read -r line; do
+			volume_UUID_array+=("$line")
+		done < "${disk}volumeUUIDList.txt"
+		if [ "$verbose" = true ]; then echo "Added volume UUIDs from $disk to array"; fi
+
+	else
+		echo "$disk partition type is INVALID not adding volume"
+
+	fi
 
 done
 if [ "$verbose" = true ]; then echo "Got volume UUIDs from filtered disk array"; fi
