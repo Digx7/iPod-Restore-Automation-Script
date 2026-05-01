@@ -101,7 +101,7 @@ for disk in "${filtered_disk_array[@]}"; do
 	echo "$disk partition type is $partitionType"
 
 	if [[ $partitionType == "FDisk_partition_scheme" ]]; then
-		echo "$disk partition type is valid adding volume"
+		echo "$disk partition type is valid checking volume"
 
 		if [ "$verbose" = true ]; then echo "Creating volume list for $disk"; fi
 		echo "<root>" > "${disk}volumeList.xml"
@@ -109,16 +109,25 @@ for disk in "${filtered_disk_array[@]}"; do
 		echo "</root>" >> "${disk}volumeList.xml"
 		if [ "$verbose" = true ]; then echo "Created volume list for $disk"; fi
 
-		if [ "$verbose" = true ]; then echo "Creating volume UUID list for $disk"; fi
-		xpath -q -e "/root/dict/string[last()]/text()" "${disk}volumeList.xml" > "${disk}volumeUUIDList.txt"
-		if [ "$verbose" = true ]; then echo "Created volume UUID list for $disk"; fi
+		if [ "$verbose" = true ]: then echo "Checking if volume partiontype for $disk is what we expect"; fi
+		volumePartionType=$(xpath -q -e "/root/dict/string/text()" "${disk}volumeList.xml")
+		
+		if [[ $volumePartitionType == "MS_DOS" ]]; then
+			echo "$disk volume type is valid adding volume"
 
-		if [ "$verbose" = true ]; then echo "Adding volume UUIDs from $disk to array"; fi
-		while IFS= read -r line; do
-			volume_UUID_array+=("$line")
-		done < "${disk}volumeUUIDList.txt"
-		if [ "$verbose" = true ]; then echo "Added volume UUIDs from $disk to array"; fi
+			if [ "$verbose" = true ]; then echo "Creating volume UUID list for $disk"; fi
+			xpath -q -e "/root/dict/string[last()]/text()" "${disk}volumeList.xml" > "${disk}volumeUUIDList.txt"
+			if [ "$verbose" = true ]; then echo "Created volume UUID list for $disk"; fi
 
+			if [ "$verbose" = true ]; then echo "Adding volume UUIDs from $disk to array"; fi
+			while IFS= read -r line; do
+				volume_UUID_array+=("$line")
+			done < "${disk}volumeUUIDList.txt"
+			if [ "$verbose" = true ]; then echo "Added volume UUIDs from $disk to array"; fi
+
+		else
+			echo "$disk volume type is INVALID and not MS_DOS not adding volume" 
+		fi
 	else
 		echo "$disk partition type is INVALID not adding volume"
 		
