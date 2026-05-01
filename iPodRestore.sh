@@ -101,7 +101,7 @@ for disk in "${filtered_disk_array[@]}"; do
 	echo "$disk partition type is $partitionType"
 
 	if [[ $partitionType == "FDisk_partition_scheme" ]]; then
-		echo "$disk partition type = FDisk_partition_scheme which is valid, checking volume"
+		echo "$disk partition type = $partitionType which is valid, checking volume"
 
 		if [ "$verbose" = true ]; then echo "Creating volume list for $disk"; fi
 		echo "<root>" > "${disk}volumeList.xml"
@@ -109,11 +109,11 @@ for disk in "${filtered_disk_array[@]}"; do
 		echo "</root>" >> "${disk}volumeList.xml"
 		if [ "$verbose" = true ]; then echo "Created volume list for $disk"; fi
 
-		if [ "$verbose" = true ]: then echo "Checking if volume partiontype for $disk is what we expect"; fi
-		volumePartionType=$(xpath -q -e "/root/dict/string/text()" "${disk}volumeList.xml")
+		if [ "$verbose" = true ]; then echo "Checking if volume partiontype for $disk is what we expect"; fi
+		volumePartitionType=$(xpath -q -e "/root/dict/string[1]/text()" "${disk}volumeList.xml")
 		
 		if [[ $volumePartitionType == "DOS_FAT_32" ]]; then
-			echo "$disk volume type = DOS_FAT_32 which is valid adding volume"
+			echo "$disk volume type = $volumePartitionType which is valid adding volume"
 
 			if [ "$verbose" = true ]; then echo "Creating volume UUID list for $disk"; fi
 			xpath -q -e "/root/dict/string[last()]/text()" "${disk}volumeList.xml" > "${disk}volumeUUIDList.txt"
@@ -126,10 +126,10 @@ for disk in "${filtered_disk_array[@]}"; do
 			if [ "$verbose" = true ]; then echo "Added volume UUIDs from $disk to array"; fi
 
 		else
-			echo "$disk volume type is NOT DOS_FAT_32 and is INVALID not adding volume" 
+			echo "$disk volume type = $volumePartitionType and is INVALID not adding volume" 
 		fi
 	else
-		echo "$disk partition type is NOT FDisk_partition_scheme and is INVALID not adding volume"
+		echo "$disk partition type =$partitionType and is INVALID not adding volume"
 		
 	fi
 
